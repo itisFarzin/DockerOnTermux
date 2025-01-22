@@ -20,6 +20,9 @@ function docker {
     elif [ "$1" = "build" ]; then
         shift
         command sudo docker build --network=host "$@"
+    elif [ "$1" = "compose" ]; then
+        shift
+        command sudo DOCKER_HOST="unix://$PREFIX/var/run/docker.sock" docker compose "$@"
     else
         command sudo docker "$@"
     fi
@@ -34,4 +37,4 @@ So I added this line to `$PREFIX/var/service/dockerd/run` file:
 rm -rf /data/data/com.termux/files/usr/lib/docker/network
 ```
 
-I Hope this help you.
+I Hope you find this note helpful.
