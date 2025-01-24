@@ -10,6 +10,8 @@ After that, you will hopefully be able to run Docker on Termux, but (for me) the
 So I wrote a simple wrapper for Docker to use host network driver for containers and run Docker commands with sudo:
 
 ```bash
+export DOCKER_HOST="unix:///data/docker/run/docker.sock"  # Default path is unix://$PREFIX/var/run/docker.sock
+
 function docker {
     if [ "$1" = "run" ]; then
         shift
@@ -20,11 +22,8 @@ function docker {
     elif [ "$1" = "build" ]; then
         shift
         command sudo docker build --network=host "$@"
-    elif [ "$1" = "compose" ]; then
-        shift
-        command sudo DOCKER_HOST="unix://$PREFIX/var/run/docker.sock" docker compose "$@"
     else
-        command sudo docker "$@"
+        command sudo -E docker "$@"
     fi
 }
 ```
